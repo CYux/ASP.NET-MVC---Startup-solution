@@ -1,0 +1,232 @@
+﻿@page
+@model Otthonbazar.Pages.Advertisements.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Add Advertisement</h2>
+<hr />
+<div class="row">
+    <div>
+        <form asp-action="Create" method="post" class="form-horizontal" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+
+                <div class="col-sm-7">
+
+                    <div class="form-group row form-inline">
+                        <label asp-for="Advertisement.City" class="col-lg-3 control-label"></label>
+                        <div>
+                            <input asp-for="Advertisement.City.Zip" id="City_Zip" class="form-control col-lg-1" />
+                            <input asp-for="Advertisement.City.Name" id="City_Name" class="form-control col-lg-3" readonly />
+                        </div>
+
+                        <span asp-validation-for="Advertisement.City.Zip" class="text-danger col-lg-6"></span>
+
+                    </div>
+
+
+                    <div class="row form-group">
+                        <label asp-for="Advertisement.Address" class="col-lg-3 control-label"></label>
+                        <div class="col-lg-6 input-group">
+                            <input asp-for="Advertisement.Address" class="form-control" />
+                        </div>
+                        <span asp-validation-for="Advertisement.Address" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Advertisement.AdvertisementType" class="col-lg-3 control-label"></label>
+                        <div class="col-lg-4 input-group">
+                            <select asp-for="Advertisement.AdvertisementType" class="form-control"
+                                    asp-items="Html.GetEnumSelectList<Otthonbazar.Data.AdvertisementType>()">
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Advertisement.Price" class="col-lg-3 control-label"></label>
+                        <div class="col-lg-4 input-group">
+                            <input asp-for="Advertisement.Price" class="form-control" />
+                            <span class="input-group-addon input-group-text">M Ft</span>
+                        </div>
+
+                        <span asp-validation-for="Advertisement.Price" class="text-danger col-lg-4"></span>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Advertisement.Size" class="col-lg-3 control-label"></label>
+                        <div class="col-lg-4 input-group">
+                            <input asp-for="Advertisement.Size" class="form-control" />
+                            <span class="input-group-addon input-group-text">M^2</span>
+                        </div>
+
+                        <span asp-validation-for="Advertisement.Size" class="text-danger col-lg-4"></span>
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Advertisement.HalfRoom" class="col-lg-3 control-label"></label>
+                        <div class="col-lg-4 input-group">
+                            <input asp-for="Advertisement.HalfRoom" class=" form-control" ) />
+                            <span class="input-group-addon input-group-text">Half</span>
+
+                        </div>
+                        <span asp-validation-for="Advertisement.HalfRoom" class="text-danger col-lg-4"></span>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Advertisement.Room" class="col-lg-3 control-label"></label>
+                        <div class="col-lg-4 input-group">
+                            <input asp-for="Advertisement.Room" class="form-control" ) />
+                            <span class="input-group-addon input-group-text">Room</span>
+
+                        </div>
+                        <span asp-validation-for="Advertisement.Room" class="text-danger col-lg-4"></span>
+
+                    </div>
+
+                    <div class="form-group row">
+                        <label asp-for="Advertisement.BuildDate" class="col-lg-3 control-label"></label>
+                        <div class="col-lg-4 input-group">
+                            <input asp-for="Advertisement.BuildDate" class="form-control" />
+                        </div>
+                        <span asp-validation-for="Advertisement.BuildDate" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-5">
+                    <link href="~/css/file.css" rel="stylesheet" />
+
+                    <div class="form-group">
+                        <label asp-for="Advertisement.Description" class="control-label"></label>
+                        <div class="col-lg-6 input-group input-group-btn">
+                            <textarea asp-for="Advertisement.Description" class="form-control " rows="4"></textarea>
+                            <span asp-validation-for="Advertisement.Description" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label">Image</label>
+                        <div class="input-group">
+                            <span class="input-group-btn">
+                                <span class="btn btn-default btn-file">
+                                    Browse
+                                   @* <input type="file" id="imgInp">*@
+                                    <input type="file" id="uploadImage" name="uploadImage">
+
+                                </span>
+                            </span>
+                            <input class="form-control" readonly>
+                        </div>
+                        @* <img id="img-upload" class="img-responsive" src="https://via.placeholder.com/460x250" />*@
+                        <div class="text-center">
+                            <img id="image" class="img-responsive" src="https://via.placeholder.com/460x250" />
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <button type="submit" value="Create" class="btn btn-default">Create</button>
+            </div>
+        </form>
+</div>
+
+
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+
+    <script>
+        $(document).ready(function () {
+            $("#City_Zip").on("blur", function (event, b) {
+                // If there is no zip code then do not call the ajax.
+                if ($("#City_Zip").val() === "")
+                    return;
+                $.get("/Advertisements/Create?handler=Zip&zip=" + event.currentTarget.value).then(function
+                    (data) {
+                    $("#City_Name").val(data.name);
+                });
+            })
+
+
+            $("input[name='uploadImage']").change(function (event) {
+                var input = event.target;
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#image').attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            });
+        });
+        //$(document).ready(function () {
+        //    $(document).on('change', '.btn-file :file', function () {
+        //        var input = $(this),
+        //            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+        //        input.trigger('fileselect', [label]);
+        //    });
+
+        //    $('.btn-file :file').on('fileselect', function (event, label) {
+
+        //        var input = $(this).parents('.input-group').find(':text'),
+        //            log = label;
+
+        //        if (input.length) {
+        //            input.val(log);
+        //        } else {
+        //            if (log) alert(log);
+        //        }
+
+        //    });
+        //    function readURL(input) {
+        //        if (input.files && input.files[0]) {
+        //            var reader = new FileReader();
+
+        //            reader.onload = function (e) {
+        //                $('#img-upload').attr('src', e.target.result);
+        //            }
+
+        //            reader.readAsDataURL(input.files[0]);
+        //        }
+        //    }
+        //    $("#imgInp").change(function () {
+        //        readURL(this);
+        //    });
+
+            //$("input[name='uploadImage']").change(function (event) {
+            //    var input = event.target;
+            //    if (input.files && input.files[0]) {
+            //        var reader = new FileReader();
+            //        reader.onload = function (e) {
+            //            $('#image').attr('src', e.target.result);
+            //        };
+            //        reader.readAsDataURL(input.files[0]);
+            //    }
+            //});
+
+        //    $("#City_Zip").on("blur", function (event, b) {
+        //        // If there is no zip code then do not call the ajax.
+        //        if ($("#City_Zip").val() === "")
+        //            return;
+        //        $.get("/Advertisements/Create?handler=Zip&zip=" + event.currentTarget.value).then(function
+        //            (data) {
+        //            $("#City_Name").val(data.name);
+        //        });
+        //    })
+        //});
+    </script>
+}

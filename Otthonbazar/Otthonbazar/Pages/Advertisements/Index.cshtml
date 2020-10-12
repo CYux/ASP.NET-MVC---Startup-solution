@@ -1,0 +1,109 @@
+﻿@page "/"
+@model Otthonbazar.Pages.Advertisements.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container">
+    <div class="row">
+        <section class="col-lg-4">
+            <h2>Search</h2>
+            <form class="form-horizontal">
+                <div class="form-group row">
+                    <label class="col-xs-12">City</label>
+                    <div class="col-xs-5">
+                        <input type="text" asp-for="Search.CityName" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-xs-12">Price</label>
+                    <div class="col-xs-5">
+                        <div class="input-group">
+                            <input asp-for="Search.PriceMin" class="form-control" />
+                            <span class="input-group-addon">M Ft</span>
+                        </div>
+                    </div>
+                    <span class="col-xs-2 text-center">&ndash;</span>
+                    <div class="col-xs-5">
+                        <div class="input-group">
+                            <input asp-for="Search.PriceMax" class="form-control" />
+                            <span class="input-group-addon">M Ft</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-xs-12">Size</label>
+                    <div class="col-xs-5">
+                        <div class="input-group">
+                            <input asp-for="Search.SizeMin" class="form-control" />
+                            <span class="input-group-addon">M^2</span>
+                        </div>
+                    </div>
+                    <span class="col-xs-2 text-center">&ndash;</span>
+                    <div class="col-xs-5">
+                        <div class="input-group">
+                            <input asp-for="Search.SizeMax" class="form-control" />
+                            <span class="input-group-addon">M^2</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-xs-12">rooms</label>
+                    <div class="col-xs-5">
+                        <div class="input-group">
+                            <input asp-for="Search.RoomMin" class="form-control" />
+                            <span class="input-group-addon">rooms</span>
+                        </div>
+                    </div>
+                    <span class="col-xs-2 text-center">&ndash;</span>
+                    <div class="col-xs-5">
+                        <div class="input-group">
+                            <input asp-for="Search.RoomMax" class="form-control" />
+                            <span class="input-group-addon">rooms</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-xs-3">
+                        <input type="submit" value="Search" class="btn btn-default" />
+                    </div>
+                </div>
+            </form>
+        </section>
+        <section class="col-lg-8">
+            <h2>Advertisements</h2>
+            <div class="row">
+                @foreach (var item in Model.Advertisement)
+                {
+
+                    <article class="col-lg-6">
+                        <a asp-page="Details" asp-route-id="@item.Id"> <img class="img-responsive" src="~/images/@item.ImageUrl" alt="https://via.placeholder.com/340x255" /></a>
+                        <div class="row">
+
+                            <h2 class="col-lg-6">@Html.DisplayFor(modelItem => item.Price) MFt</h2>
+                            <h2 class="col pull-right">@Html.DisplayFor(modelItem => item.Size) M^2</h2>
+                        </div>
+                        <div class="row">
+
+                            <h4 class="col-lg-6">
+                                @Html.DisplayFor(modelItem => item.BuildDate) @Html.DisplayFor(modelItem => item.City.Name)
+                            </h4>
+                            <h4 class="col pull-right">@Html.DisplayFor(modelItem => item.Address)</h4>
+                        </div>
+                        <div class="row">
+                            <h4 class="col-lg-4"> @Html.DisplayFor(modelItem => item.AdvertisementType)</h4>
+                        </div>
+
+                        <dl><dd>Rooms</dd><dt> @Html.DisplayFor(modelItem => item.HalfRoom) + @Html.DisplayFor(modelItem => item.Room) </dt></dl>
+                    </article>
+                }
+            </div>
+
+        </section>
+    </div>
+</div>
+
